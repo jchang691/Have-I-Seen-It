@@ -1,3 +1,4 @@
 <li>
     <%= link_to movie.name, movie %>
+     | <%= link_to "delete", movie, method: :delete, data: { confirm: "You sure?" } %>
 </li>
