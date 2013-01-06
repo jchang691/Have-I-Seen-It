@@ -1,0 +1,12 @@
+
+<h1>All Movies</h1>
+
+<%= link_to "Create a Movie", new_movie_path, class: "btn"%><br><br>
+
+<%= will_paginate %>
+
+<ul class="users">
+  <%= render @movies %>
+</ul>
+
+<%= will_paginate %>
