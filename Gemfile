@@ -10,11 +10,15 @@ gem 'nokogiri'
 gem 'bootstrap-sass'
 gem 'will_paginate', '3.0.3'
 gem 'bootstrap-will_paginate', '0.0.6'
+gem 'bcrypt-ruby'
 
 group :development, :test do
     gem 'sqlite3'
 end
 
+group :development do
+    gem 'annotate'
+end
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do

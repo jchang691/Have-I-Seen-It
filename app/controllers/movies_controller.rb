@@ -4,7 +4,7 @@ class MoviesController < ApplicationController
   # GET /movies
   # GET /movies.json
   def index
-    @movies = Movie.paginate(page: params[:page])
+    @movies = Movie.paginate(:order=> "name", page: params[:page])
   end
 
   # GET /movies/1
@@ -51,12 +51,6 @@ class MoviesController < ApplicationController
         @movie.name = rt_link.at_css("h1.movie_title span").text.strip
         @movie.year = @movie.name.match(/\((\d+)\)/)[1]
         @movie.description = rt_link.at_css("p.movie_synopsis").text
-        # link = imdb_link @movie.name
-        # doc = Nokogiri::HTML(open("http://www.imdb.com#{link}"))
-        # movie_header = doc.css('h1.header')[0]
-        # @movie.name = movie_header.children[0].text.strip
-        # @movie.year = movie_header.children[1].text.strip.gsub(/[()]/, "")
-        # @movie.description = doc.css('p')[1].text.strip
         @movie.save if @movie.all_valid?
       else
         @movie.next_step
