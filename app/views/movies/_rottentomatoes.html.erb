@@ -1,0 +1,18 @@
+
+<div class="row">
+  <div class="span8">
+      <% if @movie.rotten_tomatoes_link.at_css("div.content_body h1").text.include? "Search Results" %>
+        
+        <% @movie.rotten_tomatoes_link.css("ul#movie_results_ul li.media_block")[0..4].each do |m| %>
+            <% if m == @movie.rotten_tomatoes_link.css("ul#movie_results_ul li.media_block")[0] %>
+                <%= f.radio_button :rotten_tomatoes_url, "http://www.rottentomatoes.com#{m.at_css('h3.nomargin a')['href']}" , :checked=> true %>
+            <% else %>
+                <%= f.radio_button :rotten_tomatoes_url, "http://www.rottentomatoes.com#{m.at_css('h3.nomargin a')['href']}" %>
+            <% end %>
+            <%= label :movie_title, m.at_css("h3.nomargin").text.strip.gsub("\n", " ").gsub("\t", "") %>
+        <% end %>
+      <% else %>
+        <%= @movie.rotten_tomatoes_link.at_css('h1.movie_title span').text %>
+      <% end %>
+  </div>
+</div>

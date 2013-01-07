@@ -246,3 +246,10 @@ pre {
   padding-top: 10px;
   padding-bottom: 10px;
 }
+
+input[type="radio"], label{
+     float:left;
+    }
+input{
+ clear:left;
+}

@@ -1,4 +1,29 @@
 <h1>New movie</h1>
 
-<%= render 'form' %>
+
+
+<%= form_for(@movie) do |f| %>
+  <% if @movie.errors.any? %>
+     <div id="error_explanation">
+       <h2><%= pluralize(@movie.errors.count, "error") %> prohibited this movie from being saved:</h2>
+
+       <ul>
+       <% @movie.errors.full_messages.each do |msg| %>
+         <li><%= msg %></li>
+       <% end %>
+       </ul>
+     </div>
+  <% end %>
+  <div class="row">
+      <div class="span6 offset3">
+      <%= render "#{@movie.current_step}", :f => f %>
+      <br>
+      <div class="actions">
+          <%= f.submit "Continue" %>
+          <%= f.submit "Back", :name => "back_button" unless @movie.first_step? %>
+      </div>
+      
+    </div>
+  </div>
+<% end %>
 

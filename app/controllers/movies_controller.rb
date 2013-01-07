@@ -22,12 +22,9 @@ class MoviesController < ApplicationController
   # GET /movies/new
   # GET /movies/new.json
   def new
-    @movie = Movie.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @movie }
-    end
+    session[:movie_params] ||= {}
+    @movie = Movie.new(session[:movie_params])
+    @movie.current_step = session[:movie_step]
   end
 
   # GET /movies/1/edit
@@ -38,27 +35,45 @@ class MoviesController < ApplicationController
   # POST /movies
   # POST /movies.json
   def create
-    @movie = Movie.new(params[:movie])
-
-    link = imdb_link @movie.name
-    doc = Nokogiri::HTML(open("http://www.imdb.com#{link}"))
-    rt_link = rotten_tomatoes_link @movie.name
-    movie_header = doc.css('h1.header')[0]
-    @movie.name = movie_header.children[0].text.strip
-    @movie.year = movie_header.children[1].text.strip.gsub(/[()]/, "")
-    @movie.description = doc.css('p')[1].text.strip
-    @movie.rating = rt_link.at_css("a.tomato_numbers span").text
-    @movie.save
-
-    respond_to do |format|
-      if @movie.save
-        format.html { redirect_to @movie, notice: 'Movie was successfully created.' }
-        format.json { render json: @movie, status: :created, location: @movie }
+    session[:movie_params].deep_merge!(params[:movie]) if params[:movie]
+    @movie = Movie.new(session[:movie_params])
+    @movie.current_step = session[:movie_step]
+    if @movie.valid?
+      if params[:back_button]
+        @movie.previous_step
+      elsif @movie.last_step?
+        if @movie.rotten_tomatoes_url.nil?
+          rt_link = @movie.rotten_tomatoes_link 
+        else
+          rt_link = Nokogiri::HTML(open(@movie.rotten_tomatoes_url))
+        end
+        @movie.rating = rt_link.at_css("a.tomato_numbers span").text
+        @movie.name = rt_link.at_css("h1.movie_title span").text.strip
+        @movie.year = @movie.name.match(/\((\d+)\)/)[1]
+        @movie.description = rt_link.at_css("p.movie_synopsis").text
+        # link = imdb_link @movie.name
+        # doc = Nokogiri::HTML(open("http://www.imdb.com#{link}"))
+        # movie_header = doc.css('h1.header')[0]
+        # @movie.name = movie_header.children[0].text.strip
+        # @movie.year = movie_header.children[1].text.strip.gsub(/[()]/, "")
+        # @movie.description = doc.css('p')[1].text.strip
+        @movie.save if @movie.all_valid?
       else
-        format.html { render action: "new" }
-        format.json { render json: @movie.errors, status: :unprocessable_entity }
+        @movie.next_step
       end
+      session[:movie_step] = @movie.current_step
     end
+    if @movie.new_record?
+      render "new"
+    else
+      session[:movie_step] = session[:movie_params] = nil
+      flash[:notice] = "Movie saved!"
+      redirect_to @movie
+    end
+    
+    # @movie.rating = rt_link.at_css("a.tomato_numbers span").text
+    # @movie.save
+
   end
 
   # PUT /movies/1

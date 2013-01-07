@@ -23,8 +23,12 @@
       <%= @movie.description %>
     </p>
 
+    <p>
+      <b>RT Link:</b>
+      <%= @movie.rotten_tomatoes_url %>
+    </p>
+
     <div class="link">
-      <%= link_to 'Edit', edit_movie_path(@movie) %> |
       <%= link_to 'Back', movies_path %>
     </div>
   </aside>
