@@ -1,12 +1,18 @@
 
-<h1>All Movies</h1>
-
 <%= link_to "Add a Movie", new_movie_path, class: "btn"%><br><br>
-
+<% if !@user.nil? %>
+    <h3>User's Movies</h3>
+    <%= will_paginate %>
+    <ul class="users">
+      <%= render @movies %>
+    </ul>
+    <%= will_paginate %>
+    <br>
+<% end %>
+<h3>All Movies</h3>
 <%= will_paginate %>
-
 <ul class="users">
-  <%= render @movies %>
+  <%= render @all_movies %>
 </ul>
-
 <%= will_paginate %>
+

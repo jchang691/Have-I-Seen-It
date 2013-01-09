@@ -1,14 +1,9 @@
 module MoviesHelper
 
-    def rotten_tomatoes_nokogiri
-        @rotten_tomato_nokogiri
+    def seen?(user, movie)
+
+        !user.votes.select{|s| s.movie_id == movie.id}.empty?
+
     end
 
-    def rotten_tomatoes_nokogiri=(nokogiri_doc)
-        @rotten_tomato_nokogiri = nokogiri_doc
-    end
-
-    def clear_rotten_tomatoes_nokogiri
-        @rotten_tomato_nokogiri = nil
-    end
 end

@@ -1,4 +1,21 @@
 <li>
+    <% if signed_in? %>
+        <% if seen?(@user, movie) %>
+            [SEEN]  
+        <% end %>
+    
+    
+    <div class="pull-right">
+        <% if @user.movies.include? movie %>
+            <%= link_to "Remove", movie, method: :delete, data: { confirm: "You sure?" } %>
+            |
+            <% if seen?(@user, movie) %>
+                <%= link_to "Un-Seen", unseen_movies_path(:movie_id=>movie.id)%>
+            <% else %> 
+                <%= link_to "Seen", seen_movies_path(:movie_id=>movie.id)%>
+            <% end %>
+        <% end %>
+    </div>
+    <% end %>
     <%= link_to movie.name, movie %>
-     | <%= link_to "delete", movie, method: :delete, data: { confirm: "You sure?" } %>
 </li>

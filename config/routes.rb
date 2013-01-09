@@ -1,8 +1,11 @@
 HaveISeenIt::Application.routes.draw do
   get "users/new"
 
-  resources :movies
   resources :users
+  resources :movies do
+    get 'seen', :on => :collection
+    get 'unseen', :on => :collection
+  end
   resources :sessions, only: [:new, :create, :destroy]
 
   match '/signup', to: 'users#new'

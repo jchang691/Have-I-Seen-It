@@ -6,11 +6,9 @@ class MoviesController < ApplicationController
   def index
     session[:movie_step] = session[:movie_params] = session[:movie_doc] = nil
     @user = current_user
-    if @user.nil?
-      @movies = Movie.paginate(:order=> "name", page: params[:page])
-    else 
-      @movies = @user.movies.paginate(:order=> "name", page: params[:page])
-    end
+    @all_movies = Movie.paginate(:order=> "name", page: params[:page])
+    @movies = @user.movies.paginate(:order=> "name", page: params[:page]) unless @user.nil?
+    @movies = @all_movies if @movies.nil?
   end
 
   # GET /movies/1
@@ -42,6 +40,7 @@ class MoviesController < ApplicationController
   # POST /movies
   # POST /movies.json
   def create
+    @movie_has_been_seen = nil
     @user = current_user
     session[:movie_params].deep_merge!(params[:movie]) if params[:movie]
     @movie = Movie.new(session[:movie_params])
@@ -56,16 +55,21 @@ class MoviesController < ApplicationController
           rt_link = Nokogiri::HTML(open(@movie.rotten_tomatoes_url))
         end
         movie_title = rt_link.at_css("h1.movie_title span").text.strip
-        existing_movie = Movie.where(:name => movie_title)
-        if existing_movie.empty?
-          @movie.rating = rt_link.at_css("a.tomato_numbers span").text
-          @movie.name = movie_title
-          @movie.year = @movie.name.match(/\((\d+)\)/)[1]
-          @movie.description = rt_link.at_css("p.movie_synopsis").text
-          @movie.save if @movie.all_valid?
-          @user.movies << @movie
+        @existing_movie = Movie.where(:name => movie_title)
+        if @user.movies.select{|s| s.name == movie_title}.empty?
+          if @existing_movie.empty?
+            @movie.rating = rt_link.at_css("a.tomato_numbers span").text
+            @movie.name = movie_title
+            @movie.year = @movie.name.match(/\((\d+)\)/)[1]
+            @movie.description = rt_link.at_css("p.movie_synopsis").text
+            @movie.save if @movie.all_valid?
+            @user.movies << @movie
+          else
+            @movie_has_been_seen = true
+            @user.movies << @existing_movie
+          end
         else
-          @user.movies << existing_movie
+          flash[:notice] = "Movie is already in library"
         end
       else
         @movie.next_step
@@ -73,19 +77,23 @@ class MoviesController < ApplicationController
       session[:movie_step] = @movie.current_step
     end
     if @movie.new_record?
-      if @movie.current_step == "rottentomatoes"
-        @rotten_tomatoes_link = @movie.rotten_tomatoes_link
+      if @movie_has_been_seen
+        flash[:notice] = "Movie has been added"
+        @movie_has_been_seen = nil
+        redirect_to @existing_movie[0]
+      else
+        if @movie.current_step == "rottentomatoes"
+          @rotten_tomatoes_link = @movie.rotten_tomatoes_link
+        end
+        render "new"
+        session[:movie_doc] = @movie.rotten_tomatoes_link.to_html
       end
-      render "new"
-      session[:movie_doc] = @movie.rotten_tomatoes_link.to_html
+
     else
       session[:movie_step] = session[:movie_params] = session[:movie_doc] = nil
       flash[:notice] = "Movie saved!"
       redirect_to @movie
     end
-    
-    # @movie.rating = rt_link.at_css("a.tomato_numbers span").text
-    # @movie.save
 
   end
 
@@ -109,12 +117,28 @@ class MoviesController < ApplicationController
   # DELETE /movies/1.json
   def destroy
     @movie = Movie.find(params[:id])
-    @movie.destroy
+    @user = current_user
+    @user.movies.delete(@movie)
+    # @movie.destroy
 
     respond_to do |format|
       format.html { redirect_to movies_url }
       format.json { head :no_content }
     end
+  end
+
+  def seen
+    @user = current_user
+    @user.votes.create({:movie_id => params[:movie_id]})
+    redirect_to :back
+  end
+
+  def unseen
+    @user = current_user
+    @vote = Vote.where(:movie_id => params[:movie_id], :user_id => @user.id)[0]
+    @vote.delete
+    @vote.save
+    redirect_to :back
   end
 
   def imdb_link search_query
