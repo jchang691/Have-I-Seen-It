@@ -1,12 +1,16 @@
 
-<ul class="nav nav-tabs" id="movieTab">
-    <li class="active"><a href="#user_library" data-toggle="tab">User Library</a><li>
-    <li><a href="#all_library" data-toggle="tab">All</a><li>
-</ul>
 
-<div class="tab-content">
-    <div class="tab-pane active" id="user_library">
-        <% if !@user.nil? %>
+
+
+<% if !@user.nil? %>
+    <ul class="nav nav-tabs" id="movieTab">
+        <li class="active"><a href="#user_library" data-toggle="tab">User Library</a><li>
+        <li><a href="#all_library" data-toggle="tab">All</a><li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="user_library">
+
             <h3>Your Library</h3>
             <%= will_paginate %>
             <ul class="users">
@@ -15,15 +19,24 @@
             <%= will_paginate %>
             <br>
             <%= link_to "Add a Movie", new_movie_path, class: "btn"%>
-        <% end %>
+
+            
+        </div>
+        <div class="tab-pane" id="all_library">
+            <h3>All Movies</h3>
+            <%= will_paginate %>
+            <ul class="users">
+              <%= render @all_movies %>
+            </ul>
+            <%= will_paginate %>
+        </div>
     </div>
-    <div class="tab-pane" id="all_library">
-        <h3>All Movies</h3>
-        <%= will_paginate %>
-        <ul class="users">
-          <%= render @all_movies %>
-        </ul>
-        <%= will_paginate %>
+<% else %>
+    <div class="center hero-unit">
+        <h2>
+            Welcome to Have I Seen It!
+        </h2>
+        <%= link_to "Sign-Up Now!", signup_path, class: "btn btn-large btn-primary" %>
     </div>
-</div>
+<% end %>
 

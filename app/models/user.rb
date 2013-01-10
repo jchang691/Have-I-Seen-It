@@ -10,7 +10,7 @@
 #
 
 class User < ActiveRecord::Base
-    attr_accessible :name, :email, :password, :password_confirmation
+    attr_accessible :name, :email, :password, :password_confirmation, :display_name
     has_secure_password
 
     has_and_belongs_to_many :movies
@@ -20,12 +20,20 @@ class User < ActiveRecord::Base
     before_save :create_remember_token
 
     validates :name, presence: true, length: { maximum: 50 }
+    NO_SPACE_REGEX = /^\S*$/
+    validates :display_name, presence: true, length: {maximum: 20},
+                            uniqueness: {case_sensitive: false},
+                            format: { with: NO_SPACE_REGEX }
     VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
     validates :email, presence:   true,
                     format:     { with: VALID_EMAIL_REGEX },
                     uniqueness: { case_sensitive: false }
     validates :password, presence: true, length: { minimum: 6 }
     validates :password_confirmation, presence: true
+
+    def to_param
+        display_name
+    end
 
     private
 

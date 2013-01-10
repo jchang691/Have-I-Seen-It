@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
 
 	def show
-		@user = User.find(params[:id])
+		@user = User.find_by_display_name(params[:id])
     @movies = @user.movies.paginate(:order=> "name", page: params[:page])
 	end
 
@@ -30,7 +30,7 @@ class UsersController < ApplicationController
     end
 
     def correct_user
-      @user = User.find(params[:id])
+      @user = User.find_by_display_name(params[:id])
       redirect_to(root_path) unless current_user?(@user)
     end
 	

@@ -15,5 +15,7 @@ HaveISeenIt::Application.routes.draw do
   match '/signin', to: 'sessions#new'
   match '/signout', to: 'sessions#destroy', via: :delete
 
+  match '/search', to: 'search#search'
+
   root to: 'movies#index'
 end

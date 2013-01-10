@@ -1,0 +1,23 @@
+<% if @actors.empty? and @movies.empty? %>
+    <h3>No results matched: <%= @search_query %></h3>
+<% else %>
+    <h3>Results for: <%= @search_query %></h3><br>
+<% end %>
+
+
+<% if !@movies.empty? %>
+    <h3>Movies</h3>
+    <%= will_paginate @movies%>
+    <ul class="users">
+        <%= render @movies %>
+    </ul>
+<% end %>
+
+<% if !@actors.empty? %>
+    <h3>Actors</h3>
+    <%= will_paginate @actors%>
+    <ul class="users">
+        <%= render @actors %>
+    </ul>
+<% end %>
+
