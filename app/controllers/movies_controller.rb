@@ -119,7 +119,11 @@ class MoviesController < ApplicationController
     @movie = Movie.find(params[:id])
     @user = current_user
     @user.movies.delete(@movie)
-    # @movie.destroy
+    @vote = Vote.where(:movie_id => params[:id], :user_id => @user.id)[0]
+    if !@vote.nil?
+      @vote.delete
+      @vote.save
+    end
 
     respond_to do |format|
       format.html { redirect_to movies_url }
@@ -138,6 +142,17 @@ class MoviesController < ApplicationController
     @vote = Vote.where(:movie_id => params[:movie_id], :user_id => @user.id)[0]
     @vote.delete
     @vote.save
+    redirect_to :back
+  end
+
+  def add_to_library
+    @user = current_user
+    @movie = Movie.find(params[:movie_id])
+    if @user.movies.select{|s| s.id == @movie.id}.empty?
+      @user.movies << @movie
+    else
+      flash[:notice] = "Movie is already in Library"
+    end
     redirect_to :back
   end
 

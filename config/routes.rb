@@ -5,7 +5,9 @@ HaveISeenIt::Application.routes.draw do
   resources :movies do
     get 'seen', :on => :collection
     get 'unseen', :on => :collection
+    get 'add_to_library', :on => :collection
   end
+
   resources :sessions, only: [:new, :create, :destroy]
 
   match '/signup', to: 'users#new'

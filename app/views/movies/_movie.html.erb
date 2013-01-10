@@ -14,6 +14,8 @@
             <% else %> 
                 <%= link_to "Seen", seen_movies_path(:movie_id=>movie.id)%>
             <% end %>
+        <% else %>
+            <%= link_to "Add to library", add_to_library_movies_path(:movie_id=>movie.id) %>
         <% end %>
     </div>
     <% end %>

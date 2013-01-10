@@ -2,6 +2,7 @@ class UsersController < ApplicationController
 
 	def show
 		@user = User.find(params[:id])
+    @movies = @user.movies.paginate(:order=> "name", page: params[:page])
 	end
 
   def new
