@@ -58,11 +58,21 @@ class MoviesController < ApplicationController
         @existing_movie = Movie.where(:name => movie_title)
         if @user.movies.select{|s| s.name == movie_title}.empty?
           if @existing_movie.empty?
+
             @movie.rating = rt_link.at_css("a.tomato_numbers span").text
             @movie.name = movie_title
             @movie.year = @movie.name.match(/\((\d+)\)/)[1]
             @movie.description = rt_link.at_css("p.movie_synopsis").text
             @movie.save if @movie.all_valid?
+            actor_arr = rt_link.css("div#cast-info li span[itemprop=name]")
+            actor_arr[0..7].each do |act|
+              @actor = Actor.new(:name => act.text)
+              if @actor.save
+                @movie.actors << @actor
+              else
+                @movie.actors << Actor.find_by_name(act.text)
+              end
+            end
             @user.movies << @movie
           else
             @movie_has_been_seen = true

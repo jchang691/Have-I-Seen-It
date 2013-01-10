@@ -20,6 +20,7 @@ class Movie < ActiveRecord::Base
     validates :name, :uniqueness => true
 
     has_and_belongs_to_many :users
+    has_and_belongs_to_many :actors
 
     attr_writer :current_step
     attr_accessor :rottentomato

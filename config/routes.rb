@@ -2,6 +2,7 @@ HaveISeenIt::Application.routes.draw do
   get "users/new"
 
   resources :users
+  resources :actors
   resources :movies do
     get 'seen', :on => :collection
     get 'unseen', :on => :collection

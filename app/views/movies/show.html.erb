@@ -23,10 +23,13 @@
       <%= @movie.description %>
     </p>
 
-    <p>
-      <b>RT Link:</b>
-      <%= @movie.rotten_tomatoes_url %>
-    </p>
+    <% @movie.actors.each do |actor| %>
+      <% if actor == @movie.actors.last %>
+        <%= link_to "#{actor.name}", actor %>
+      <% else %>
+        <%= link_to "#{actor.name}, ", actor %>
+      <% end %>
+    <% end %>
 
     <div class="link">
       <%= link_to 'Back', movies_path %>
