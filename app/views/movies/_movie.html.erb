@@ -6,7 +6,7 @@
     
     
     <div class="pull-right">
-        <% if @user.movies.include? movie %>
+        <% if @user.movies.include? movie and @user.id == current_user.id%>
             <%= link_to "Remove", movie, method: :delete, data: { confirm: "You sure?" } %>
             |
             <% if seen?(@user, movie) %>
@@ -14,7 +14,7 @@
             <% else %> 
                 <%= link_to "Seen", seen_movies_path(:movie_id=>movie.id)%>
             <% end %>
-        <% else %>
+        <% elsif !current_user.movies.include? movie %>
             <%= link_to "Add to library", add_to_library_movies_path(:movie_id=>movie.id) %>
         <% end %>
     </div>

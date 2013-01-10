@@ -1,19 +1,29 @@
 
-
-<% if !@user.nil? %>
-    <%= link_to "Add a Movie", new_movie_path, class: "btn"%><br><br>
-    <h3>Your Library</h3>
-    <%= will_paginate %>
-    <ul class="users">
-      <%= render @movies %>
-    </ul>
-    <%= will_paginate %>
-    <br>
-<% end %>
-<h3>All Movies</h3>
-<%= will_paginate %>
-<ul class="users">
-  <%= render @all_movies %>
+<ul class="nav nav-tabs" id="movieTab">
+    <li class="active"><a href="#user_library" data-toggle="tab">User Library</a><li>
+    <li><a href="#all_library" data-toggle="tab">All</a><li>
 </ul>
-<%= will_paginate %>
+
+<div class="tab-content">
+    <div class="tab-pane active" id="user_library">
+        <% if !@user.nil? %>
+            <h3>Your Library</h3>
+            <%= will_paginate %>
+            <ul class="users">
+              <%= render @movies %>
+            </ul>
+            <%= will_paginate %>
+            <br>
+            <%= link_to "Add a Movie", new_movie_path, class: "btn"%>
+        <% end %>
+    </div>
+    <div class="tab-pane" id="all_library">
+        <h3>All Movies</h3>
+        <%= will_paginate %>
+        <ul class="users">
+          <%= render @all_movies %>
+        </ul>
+        <%= will_paginate %>
+    </div>
+</div>
 
