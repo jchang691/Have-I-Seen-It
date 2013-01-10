@@ -9,7 +9,7 @@
             <% else %>
                 <%= f.radio_button :rotten_tomatoes_url, "http://www.rottentomatoes.com#{m.at_css('h3.nomargin a')['href']}" %>
             <% end %>
-            <%= label :movie_title, m.at_css("h3.nomargin").text.strip.gsub("\n", " ").gsub("\t", "") %>
+            <%= label :movie_title, m.at_css("h3.nomargin").text.force_encoding('ISO-8859-1').encode('UTF-8').strip.gsub("\n", " ").gsub("\t", "") %>
         <% end %>
       <% else %>
         <%= @rotten_tomatoes_link.at_css('h1.movie_title span').text %>
