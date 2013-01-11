@@ -62,7 +62,8 @@ class MoviesController < ApplicationController
             @movie.rating = rt_link.at_css("a.tomato_numbers span").text
             @movie.name = movie_title
             @movie.year = @movie.name.match(/\((\d+)\)/)[1]
-            @movie.description = rt_link.at_css("p.movie_synopsis").text.force_encoding('ISO-8859-1').encode('UTF-8')
+            movie_text =  rt_link.at_css("p.movie_synopsis").text.force_encoding('ISO-8859-1').encode('UTF-8')
+            @movie.description = movie_text.slice(0..movie_text.index("~")-1)
             @movie.save if @movie.all_valid?
             actor_arr = rt_link.css("div#cast-info li span[itemprop=name]")
             actor_arr[0..7].each do |act|
