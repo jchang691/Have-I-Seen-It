@@ -8,8 +8,7 @@ gem 'rails'
 
 gem 'nokogiri'
 gem 'bootstrap-sass'
-gem 'will_paginate', '3.0.3'
-gem 'bootstrap-will_paginate', '0.0.6'
+gem 'will_paginate'
 gem 'bcrypt-ruby'
 
 group :development, :test do
