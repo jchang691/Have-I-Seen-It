@@ -1,7 +1,9 @@
 HaveISeenIt::Application.routes.draw do
   get "users/new"
 
-  resources :users
+  resources :users do
+    get 'movies_per_page', :on => :collection
+  end
   resources :actors
   resources :movies do
     get 'seen', :on => :collection

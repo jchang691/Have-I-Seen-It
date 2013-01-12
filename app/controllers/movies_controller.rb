@@ -6,8 +6,9 @@ class MoviesController < ApplicationController
   def index
     session[:movie_step] = session[:movie_params] = session[:movie_doc] = nil
     @user = current_user
-    @all_movies = Movie.paginate(:order=> "name", page: params[:page])
-    @movies = @user.movies.paginate(:order=> "name", page: params[:page]) unless @user.nil?
+    movies_per_page = @user.nil? ? 10 : @user.movies_per_page
+    @all_movies = Movie.paginate(:order=> "name", page: params[:page], :per_page => movies_per_page)
+    @movies = @user.movies.paginate(:order=> "name", page: params[:page], :per_page => movies_per_page) unless @user.nil?
     @movies = @all_movies if @movies.nil?
 
   end
@@ -108,22 +109,6 @@ class MoviesController < ApplicationController
       redirect_to @movie
     end
 
-  end
-
-  # PUT /movies/1
-  # PUT /movies/1.json
-  def update
-    @movie = Movie.find(params[:id])
-
-    respond_to do |format|
-      if @movie.update_attributes(params[:movie])
-        format.html { redirect_to @movie, notice: 'Movie was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @movie.errors, status: :unprocessable_entity }
-      end
-    end
   end
 
   # DELETE /movies/1

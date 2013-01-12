@@ -20,6 +20,13 @@ class UsersController < ApplicationController
     end
   end
 
+  def movies_per_page
+    @user = current_user
+    @user.update_attribute(:movies_per_page, params[:per_page])
+    sign_in @user
+    redirect_to :back
+  end
+
   private
 
     def signed_in_user
