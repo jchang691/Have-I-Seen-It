@@ -9,6 +9,7 @@ class MoviesController < ApplicationController
     @all_movies = Movie.paginate(:order=> "name", page: params[:page])
     @movies = @user.movies.paginate(:order=> "name", page: params[:page]) unless @user.nil?
     @movies = @all_movies if @movies.nil?
+
   end
 
   # GET /movies/1

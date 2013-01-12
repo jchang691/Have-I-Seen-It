@@ -1,34 +1,29 @@
-
-
-
-
 <% if !@user.nil? %>
     <ul class="nav nav-tabs" id="movieTab">
-        <li class="active"><a href="#user_library" data-toggle="tab">User Library</a><li>
+        <li><a href="#user_library" data-toggle="tab">User Library</a><li>
         <li><a href="#all_library" data-toggle="tab">All</a><li>
     </ul>
 
     <div class="tab-content">
-        <div class="tab-pane active" id="user_library">
+        <div class="tab-pane" id="user_library">
+
+            
 
             <h3>Your Library</h3>
-            <%= will_paginate %>
             <ul class="users">
               <%= render @movies %>
             </ul>
-            <%= will_paginate %>
+            <%= will_paginate @movies%>
             <br>
-            <%= link_to "Add a Movie", new_movie_path, class: "btn"%>
-
-            
+            <%= link_to "Add a Movie", new_movie_path, class: "btn "%>
         </div>
+
         <div class="tab-pane" id="all_library">
             <h3>All Movies</h3>
-            <%= will_paginate %>
             <ul class="users">
               <%= render @all_movies %>
             </ul>
-            <%= will_paginate %>
+            <%= will_paginate @all_movies %>
         </div>
     </div>
 <% else %>
@@ -40,3 +35,21 @@
     </div>
 <% end %>
 
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $('#movieTab a[data-toggle="tab"]').on('shown', function (e) {
+            //save the latest tab; use cookies if you like 'em better:
+            localStorage.setItem('lastTab', $(e.target).attr('href'));
+        });
+
+        //go to the latest tab, if it exists:
+        var lastTab = localStorage.getItem('lastTab');
+        if (lastTab != "undefined") {
+          $('ul.nav-tabs').children().removeClass('active');
+          $('a[href='+ lastTab +']').parents('li:first').addClass('active');
+          $('div.tab-content').children().removeClass('active');
+          $(lastTab).addClass('active');
+        }
+    });
+</script>

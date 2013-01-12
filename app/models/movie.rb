@@ -25,6 +25,8 @@ class Movie < ActiveRecord::Base
     attr_writer :current_step
     attr_accessor :rottentomato
 
+    self.per_page = 10
+
     def current_step
         @current_step || steps.first
     end
