@@ -5,9 +5,9 @@
       <nav>
         <ul class="nav pull-right">
           <% if signed_in? %>
-            <li><%= link_to "Welcome #{current_user.name}" %></li>
+            <li><%= link_to "Welcome #{current_user.name}", '#' %></li>
             <li>
-              <a href="#myModal" data-toggle="modal">Search</a>
+              <a href="#search_modal" data-toggle="modal">Search</a>
             </li>
             <li id="fat-menu" class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -31,28 +31,26 @@
   </div>
 
 
-  <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div id="search_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Search</h3>
+    <h3 id="search_modal_label">Search</h3>
   </div>
-  
     <script>
-         function ClearTextBox()
-         {
-             document.getElementById('search_field').value = ""
-         }
+      function ClearTextBox()
+      {
+          document.getElementById('search_field').value = ""
+      }
     </script>
-    <%= form_tag :controller => 'search', :action => 'search', :method => 'get' do %>
+    <form action="<%= search_path %>" method="get" >
       <div class="modal-body">
         <%= text_field_tag :search, params[:search], :id => 'search_field' %>
       </div>
       <div class="modal-footer">
-      <%= submit_tag "Search", :name => nil, :class => "btn"%>
-      <%= link_to_function "Clear", "ClearTextBox()", :class => "btn"%>
+        <%= submit_tag "Search", :name => nil, :class => "btn"%>
+        <%= link_to_function "Clear", "ClearTextBox()", :class => "btn"%>
       </div>
-    <% end %> 
-  
+   </form>
 </div>
 </header>
 
