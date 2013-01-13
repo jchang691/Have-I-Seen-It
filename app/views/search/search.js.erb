@@ -1,0 +1,2 @@
+$(".movie_search").html("<%= escape_javascript(render @movies) %><%= escape_javascript(will_paginate @movies, :param_name => 'movie_page') %>");
+$(".actor_search").html("<%= escape_javascript(render @actors) %><%= escape_javascript(will_paginate @actors, :param_name => 'actor_page') %>");
