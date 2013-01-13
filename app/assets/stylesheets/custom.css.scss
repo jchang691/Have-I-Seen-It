@@ -200,7 +200,7 @@ select{
  
  /* users index */
 
-.users {
+.users, .all_movies, .user_movies {
   list-style: none;
   margin: 0;
   li {

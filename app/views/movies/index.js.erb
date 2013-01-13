@@ -1,0 +1,2 @@
+$(".all_movies").html("<%= escape_javascript(render @all_movies) %><%= escape_javascript(will_paginate @all_movies, :param_name => 'all_movie_page') %>");
+$(".user_movies").html("<%= escape_javascript(render @movies) %><%= escape_javascript(will_paginate @movies, :param_name => 'user_page') %>");

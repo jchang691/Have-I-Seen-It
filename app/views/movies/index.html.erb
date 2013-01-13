@@ -1,3 +1,4 @@
+<% javascript "pagination" %>
 <% if !@user.nil? %>
     <ul class="nav nav-tabs" id="movieTab">
         <li><a href="#user_library" data-toggle="tab">User Library</a><li>
@@ -13,10 +14,11 @@
                 <%= link_to "20", movies_per_page_users_path(:per_page => 20) %>
             </div>
             <h3>Your Library</h3>
-            <ul class="users">
+            <ul class="user_movies">
               <%= render @movies %>
+              <%= will_paginate @movies, :param_name => 'user_page' %>
             </ul>
-            <%= will_paginate @movies%>
+            
             <br>
             <%= link_to "Add a Movie", new_movie_path, class: "btn "%>
         </div>
@@ -29,10 +31,11 @@
                 <%= link_to "20", movies_per_page_users_path(:per_page => 20) %>
             </div>
             <h3>All Movies</h3>
-            <ul class="users">
+            <ul class="all_movies">
               <%= render @all_movies %>
+              <%= will_paginate @all_movies, :param_name => 'all_movie_page' %>
             </ul>
-            <%= will_paginate @all_movies %>
+            
         </div>
     </div>
 <% else %>
@@ -45,6 +48,14 @@
 <% end %>
 
 <script type="text/javascript">
+    window.onbeforeunload= function() {
+        var form = $('.all_movies').html();
+        localStorage.setItem('allLastPage', form)
+
+        var form2 = $('.user_movies').html();
+        localStorage.setItem('userLastPage', form2)
+    };
+
     $(document).ready(function() {
 
         $('#movieTab a[data-toggle="tab"]').on('shown', function (e) {
@@ -60,6 +71,15 @@
           $('div.tab-content').children().removeClass('active');
           $(lastTab).addClass('active');
         }
-    });
 
+        var allLastPage = localStorage.getItem('allLastPage');
+        if(allLastPage){
+            $('.all_movies').html(allLastPage)
+        }
+
+        var userLastPage = localStorage.getItem('userLastPage');
+        if(userLastPage){
+            $('.user_movies').html(userLastPage)
+        }
+    });
 </script>
