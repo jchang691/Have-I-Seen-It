@@ -54,6 +54,8 @@
 
         var form2 = $('.user_movies').html();
         localStorage.setItem('userLastPage', form2)
+
+        localStorage.setItem('prevPerPage', <%= @user.movies_per_page %>)
     };
 
     $(document).ready(function() {
@@ -72,14 +74,16 @@
           $(lastTab).addClass('active');
         }
 
-        var allLastPage = localStorage.getItem('allLastPage');
-        if(allLastPage){
-            $('.all_movies').html(allLastPage)
-        }
+        if(<%= @user.movies_per_page %> == localStorage.getItem('prevPerPage')){
+            var allLastPage = localStorage.getItem('allLastPage');
+            if(allLastPage){
+                $('.all_movies').html(allLastPage)
+            }
 
-        var userLastPage = localStorage.getItem('userLastPage');
-        if(userLastPage){
-            $('.user_movies').html(userLastPage)
+            var userLastPage = localStorage.getItem('userLastPage');
+            if(userLastPage){
+                $('.user_movies').html(userLastPage)
+            }
         }
     });
 </script>
