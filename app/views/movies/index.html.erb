@@ -38,16 +38,7 @@
             
         </div>
     </div>
-<% else %>
-    <div class="center hero-unit">
-        <h2>
-            Welcome to Have I Seen It!
-        </h2>
-        <%= link_to "Sign-Up Now!", signup_path, class: "btn btn-large btn-primary" %>
-    </div>
-<% end %>
-
-<script type="text/javascript">
+    <script type="text/javascript">
     window.onbeforeunload= function() {
         var form = $('.all_movies').html();
         localStorage.setItem('allLastPage', form)
@@ -86,4 +77,14 @@
             }
         }
     });
-</script>
+    </script>
+<% else %>
+    <div class="center hero-unit">
+        <h2>
+            Welcome to Have I Seen It!
+        </h2>
+        <%= link_to "Sign-Up Now!", signup_path, class: "btn btn-large btn-primary" %>
+    </div>
+<% end %>
+
+
