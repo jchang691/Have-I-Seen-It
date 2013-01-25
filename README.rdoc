@@ -1,6 +1,7 @@
 == Welcome to HaveISeenIt
 
-This site keeps track of your movies library as well as if you have seen it or not.
+This site keeps track of your movies library as well as if you have seen it or not. This is hosted on heroku
+https://haveiseenit.herokuapp.com
 
 == Let's Get Started
 
@@ -9,3 +10,5 @@ This site keeps track of your movies library as well as if you have seen it or n
    new movie by clicking the "Add Movie" button
 3. Next to each movie, there's a link "Seen" which allows you to keep track of which movies you have seen
 4. Enjoy!
+
+
