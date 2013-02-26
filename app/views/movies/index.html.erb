@@ -58,11 +58,16 @@
 
         //go to the latest tab, if it exists:
         var lastTab = localStorage.getItem('lastTab');
-        if (lastTab != "undefined") {
+        if (lastTab != null) {
           $('ul.nav-tabs').children().removeClass('active');
           $('a[href='+ lastTab +']').parents('li:first').addClass('active');
           $('div.tab-content').children().removeClass('active');
           $(lastTab).addClass('active');
+        }
+        else
+        {
+          $('a[href=#user_library]').parents('li:first').addClass('active');
+          $('div#user_library').addClass('active');
         }
 
         if(<%= @user.movies_per_page %> == localStorage.getItem('prevPerPage')){
