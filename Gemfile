@@ -6,11 +6,11 @@ gem 'rails'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 
-gem 'nokogiri'
-gem 'bootstrap-sass'
-gem 'will_paginate'
-gem 'bootstrap-will_paginate'
-gem 'bcrypt-ruby'
+gem 'nokogiri', '1.5.6'
+gem 'bootstrap-sass', '2.2.2.0'
+gem 'will_paginate', '3.0.4'
+gem 'bootstrap-will_paginate', '0.0.9'
+gem 'bcrypt-ruby', '3.0.1'
 
 group :development, :test do
     gem 'sqlite3'
@@ -31,7 +31,7 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
-gem 'jquery-rails'
+gem 'jquery-rails', '2.1.4'
 
 group :production do
   gem 'pg', '0.12.2'
