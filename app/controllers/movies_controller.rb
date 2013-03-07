@@ -129,10 +129,17 @@ class MoviesController < ApplicationController
     end
   end
 
+  def update
+
+  end
+
   def seen
     @user = current_user
     @user.votes.create({:movie_id => params[:movie_id]})
-    redirect_to :back
+    respond_to do |format|
+      format.html {redirect_to :back}
+      format.js
+    end
   end
 
   def unseen
@@ -140,7 +147,10 @@ class MoviesController < ApplicationController
     @vote = Vote.where(:movie_id => params[:movie_id], :user_id => @user.id)[0]
     @vote.delete
     @vote.save
-    redirect_to :back
+    respond_to do |format|
+      format.html {redirect_to :back}
+      format.js
+    end
   end
 
   def add_to_library

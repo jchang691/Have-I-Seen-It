@@ -10,9 +10,9 @@
             <%= link_to "Remove", movie, method: :delete, data: { confirm: "You sure?" } %>
             |
             <% if seen?(@user, movie) %>
-                <%= link_to "Un-Seen", unseen_movies_path(:movie_id=>movie.id)%>
+              <%= link_to "Un-Seen", unseen_movies_path(:movie_id=>movie.id), :class=>"seen", :remote=>true%>
             <% else %> 
-                <%= link_to "Seen", seen_movies_path(:movie_id=>movie.id)%>
+              <%= link_to "Seen", seen_movies_path(:movie_id=>movie.id), :class=>"seen", :remote=>true%>
             <% end %>
         <% elsif !current_user.movies.include? movie %>
             <%= link_to "Add to library", add_to_library_movies_path(:movie_id=>movie.id) %>
