@@ -123,7 +123,7 @@ DEPENDENCIES
   nokogiri (= 1.5.6)
   pg (= 0.12.2)
   rails
-  sass-rails
+  sass-rails (~> 3.2.3)
   sqlite3
   uglifier (>= 1.0.3)
   will_paginate (= 3.0.4)

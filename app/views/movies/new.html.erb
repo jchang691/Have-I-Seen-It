@@ -1,7 +1,5 @@
 <h1>New movie</h1>
 
-
-
 <%= form_for(@movie) do |f| %>
   <% if @movie.errors.any? %>
      <div id="error_explanation">
@@ -18,12 +16,17 @@
       <div class="span6 offset3">
       <%= render "#{@movie.current_step}", :f => f %>
       <br>
+
       <div class="actions">
-          <%= f.submit "Continue" unless @rottentomatoes.nil?%>
+          <%= f.submit "Continue" if (@rotten_tomatoes_link.nil?) or (not @rotten_tomatoes_link.nil? and not @rotten_tomatoes_link.at_css("div.content_body h1").nil?) %>
           <%= f.submit "Back", :name => "back_button" unless @movie.first_step? %>
       </div>
       
     </div>
   </div>
 <% end %>
+
+<script>
+
+</script>
 

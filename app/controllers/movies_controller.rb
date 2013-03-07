@@ -61,16 +61,16 @@ class MoviesController < ApplicationController
         if @user.movies.select{|s| s.name == movie_title}.empty?
           if @existing_movie.empty?
 
-            @movie.rating = rt_link.at_css("a.tomato_numbers span").text
+            @movie.rating = rt_link.at_css("a.tomato_numbers span").text unless rt_link.at_css("a.tomato_numbers span").nil?
             @movie.name = movie_title
             @movie.year = @movie.name.match(/\((\d+)\)/)[1]
-            movie_text =  rt_link.at_css("p.movie_synopsis").text.force_encoding('ISO-8859-1').encode('UTF-8')
+            movie_text =  force_encode(rt_link.at_css("p.movie_synopsis").text)
             movie_text = movie_text.slice(0..movie_text.index("~")-1) unless movie_text.index("~").nil?
             @movie.description = movie_text
             @movie.save if @movie.all_valid?
             actor_arr = rt_link.css("div#cast-info li span[itemprop=name]")
             actor_arr[0..7].each do |act|
-              @actor = Actor.new(:name => act.text)
+              @actor = Actor.new(:name => force_encode(act.text))
               if @actor.save
                 @movie.actors << @actor
               else
@@ -176,6 +176,10 @@ class MoviesController < ApplicationController
 
   def rotten_tomatoes_link search_query
     Nokogiri::HTML(open("http://www.rottentomatoes.com/search/?search=#{search_query.gsub(" ", "+")}"))
+  end
+
+  def force_encode text
+    text.force_encoding('ISO-8859-1').encode('UTF-8')
   end
 
   
