@@ -162,9 +162,6 @@ class MoviesController < ApplicationController
     @movie = Movie.find(params[:movie_id])
     if @user.movies.select{|s| s.id == @movie.id}.empty?
       @user.movies << @movie
-      flash[:notice] = "Movie has been added to Library"
-    else
-      flash[:notice] = "Movie is already in Library"
     end
     respond_to do |format|
       format.html {redirect_to :back}
