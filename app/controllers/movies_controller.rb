@@ -44,6 +44,11 @@ class MoviesController < ApplicationController
   def create
     @movie_has_been_seen = nil
     @user = current_user
+    if session[:movie_params].nil?
+      flash[:notice] = "Session has expired"
+      redirect_to root_path 
+      return
+    end
     session[:movie_params].deep_merge!(params[:movie]) if params[:movie]
     @movie = Movie.new(session[:movie_params])
     @movie.current_step = session[:movie_step]
