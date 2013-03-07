@@ -83,7 +83,7 @@ class MoviesController < ApplicationController
             @user.movies << @existing_movie
           end
         else
-          flash[:notice] = "Movie is already in library"
+          flash.now[:notice] = "#{movie_title} is already in the library"
         end
       else
         @movie.next_step
@@ -92,7 +92,7 @@ class MoviesController < ApplicationController
     end
     if @movie.new_record?
       if @movie_has_been_seen
-        flash[:notice] = "Movie has been added"
+        flash.now[:notice] = "#{movie_title} has been added"
         @movie_has_been_seen = nil
         redirect_to @existing_movie[0]
       else
@@ -105,9 +105,10 @@ class MoviesController < ApplicationController
 
     else
       session[:movie_step] = session[:movie_params] = session[:movie_doc] = nil
-      flash[:notice] = "Movie saved!"
+      flash[:notice] = "#{movie_title} has been saved!"
       redirect_to @movie
     end
+
 
   end
 
@@ -118,7 +119,6 @@ class MoviesController < ApplicationController
     @user = current_user
     @user.movies.delete(@movie)
     @vote = Vote.where(:movie_id => params[:id], :user_id => @user.id)[0]
-    flash[:success] = "Movie was deleted"
     if !@vote.nil?
       @vote.delete
       @vote.save
