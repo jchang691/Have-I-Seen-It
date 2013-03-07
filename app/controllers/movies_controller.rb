@@ -136,6 +136,7 @@ class MoviesController < ApplicationController
   def seen
     @user = current_user
     @user.votes.create({:movie_id => params[:movie_id]})
+    @movie = Movie.find(params[:movie_id])
     respond_to do |format|
       format.html {redirect_to :back}
       format.js
@@ -144,6 +145,7 @@ class MoviesController < ApplicationController
 
   def unseen
     @user = current_user
+    @movie = Movie.find(params[:movie_id])
     @vote = Vote.where(:movie_id => params[:movie_id], :user_id => @user.id)[0]
     @vote.delete
     @vote.save

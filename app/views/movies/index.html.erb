@@ -73,11 +73,6 @@
             //save the latest tab; use cookies if you like 'em better:
             localStorage.setItem('lastTab', $(e.target).attr('href'));
             });
-        
-        var clicked = false;
-        $(".user_movies a.seen").live("click", function(){
-           clicked = true;
-        });
 
         //go to the latest tab, if it exists:
         var lastTab = localStorage.getItem('lastTab');
@@ -93,8 +88,7 @@
           $('div#user_library').addClass('active');
         }
 
-        if(<%= @user.movies_per_page %> == localStorage.getItem('prevPerPage') && 
-            clicked){
+        if(<%= @user.movies_per_page %> == localStorage.getItem('prevPerPage')){
             var allLastPage = localStorage.getItem('allLastPage');
             if(allLastPage){
                 $('.all_movies').html(allLastPage)
