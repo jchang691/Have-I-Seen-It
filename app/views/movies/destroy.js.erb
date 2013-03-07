@@ -1,0 +1,5 @@
+var str = "<%= escape_javascript(render @movie) %>";
+str = str.replace(/<li id="movie_\w+">/, "");
+str = str.replace(/<li>/, "");
+$("li#movie_<%= @movie.id %>").html(str);
+

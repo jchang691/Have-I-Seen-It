@@ -15,3 +15,4 @@
 //= require jquery_ujs
 //= require bootstrap
 //= require pagination
+//= require_tree .

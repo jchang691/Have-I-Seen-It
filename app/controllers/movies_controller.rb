@@ -118,14 +118,16 @@ class MoviesController < ApplicationController
     @user = current_user
     @user.movies.delete(@movie)
     @vote = Vote.where(:movie_id => params[:id], :user_id => @user.id)[0]
+    flash[:success] = "Movie was deleted"
     if !@vote.nil?
       @vote.delete
       @vote.save
     end
 
     respond_to do |format|
-      format.html { redirect_to movies_url }
+      format.html { redirect_to :back }
       format.json { head :no_content }
+      format.js { render :template => 'movies/destroy.js.erb', :layout => false }
     end
   end
 
@@ -164,7 +166,10 @@ class MoviesController < ApplicationController
     else
       flash[:notice] = "Movie is already in Library"
     end
-    redirect_to :back
+    respond_to do |format|
+      format.html {redirect_to :back}
+      format.js
+    end
   end
 
   def imdb_link search_query
