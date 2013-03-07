@@ -19,7 +19,7 @@
       <%= render "#{@movie.current_step}", :f => f %>
       <br>
       <div class="actions">
-          <%= f.submit "Continue" %>
+          <%= f.submit "Continue" unless @rottentomatoes.nil?%>
           <%= f.submit "Back", :name => "back_button" unless @movie.first_step? %>
       </div>
       

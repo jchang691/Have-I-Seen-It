@@ -1,38 +1,38 @@
 <% javascript "pagination" %>
 <% if @actors.empty? and @movies.empty? %>
-    <h3>No results matched: <%= @search_query %></h3>
+<h3>No results matched: <%= @search_query %></h3>
 <% else %>
-    <h3>Results for: <%= @search_query %></h3><br>
+<h3>Results for: <%= @search_query %></h3><br>
 <% end %>
 
 <ul class="nav nav-tabs" id="searchTab">
-<% if !@movies.empty? %>
-    <li class="active"><a href="#movie_search_tab" data-toggle="tab">Movies</a></li>
-<% end %>
+    <% if !@movies.empty? %>
+        <li class="active"><a href="#movie_search_tab" data-toggle="tab">Movies</a></li>
+    <% end %>
 
-<% if !@actors.empty? %>
-    <li <% if @movies.empty? %>class="active"<% end %>><a href="#actor_search_tab" data-toggle="tab">Actors</a></li>
-<% end %>
+    <% if !@actors.empty? %>
+        <li <% if @movies.empty? %>class="active"<% end %>><a href="#actor_search_tab" data-toggle="tab">Actors</a></li>
+    <% end %>
 </ul>
 
 <div class="tab-content" %>
     <% if !@movies.empty? %>
-    <div class="tab-pane active" id="movie_search_tab">
-        <h3>Movies</h3>
-        <ul class="movie_search">
-            <%= render @movies %>
-            <%= will_paginate @movies, :param_name => 'movie_page' %>
-        </ul>
-    </div>
-    <% end %>
-    <% if !@actors.empty? %>
-    <div class="tab-pane <% if @movies.empty? %>active<% end %>" id="actor_search_tab">
-        <h3>Actors</h3>
-        <ul class="actor_search">
-            <%= render @actors %>
-            <%= will_paginate @actors, :param_name => 'actor_page'%>
-        </ul>
-    </div>
+        <div class="tab-pane active" id="movie_search_tab">
+            <h3>Movies</h3>
+            <ul class="movie_search">
+                <%= render @movies %>
+                <%= will_paginate @movies, :param_name => 'movie_page' %>
+            </ul>
+        </div>
+        <% end %>
+        <% if !@actors.empty? %>
+        <div class="tab-pane <% if @movies.empty? %>active<% end %>" id="actor_search_tab">
+            <h3>Actors</h3>
+            <ul class="actor_search">
+                <%= render @actors %>
+                <%= will_paginate @actors, :param_name => 'actor_page'%>
+            </ul>
+        </div>
     <% end %>
 </div>
 
