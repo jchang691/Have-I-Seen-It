@@ -45,7 +45,7 @@
           <script type="text/javascript" charset="UTF-8">
             $(function() {
                 $('#alert').click(function(){ 
-                 $.jGrowl(this.getAttribute('data-message'));
+                  $.jGrowl(this.getAttribute('data-message'));
                   return false;
                 })
             });
@@ -57,7 +57,7 @@
 
     </div>
     <script type="text/javascript">
-    window.onbeforeunload= function() {
+    window.onbeforeunload= function() {i
         var form = $('.all_movies').html();
         localStorage.setItem('allLastPage', form)
 

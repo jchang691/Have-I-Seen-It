@@ -7,7 +7,7 @@ gem 'rails'
 
 
 gem 'nokogiri', '1.5.6'
-gem 'bootstrap-sass', '2.2.2.0'
+gem 'bootstrap-sass'
 gem 'will_paginate', '3.0.4'
 gem 'bootstrap-will_paginate', '0.0.9'
 gem 'bcrypt-ruby', '3.0.1'
