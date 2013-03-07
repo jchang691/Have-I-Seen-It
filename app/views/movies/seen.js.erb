@@ -1,4 +1,4 @@
-
+$.jGrowl("<%= @movie.name %> has been Seen");
 var str = "<%= escape_javascript(render @movie) %>";
 str = str.replace(/<li id="movie_\w+">/, "");
 str = str.replace(/<li>/, "");
