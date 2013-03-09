@@ -44,11 +44,10 @@ class MoviesController < ApplicationController
   def create
     @movie_has_been_seen = nil
     @user = current_user
-    if session[:movie_params].nil?
-      flash[:notice] = "Session has expired"
-      redirect_to root_path 
-      return
-    end
+    @total_time = 0
+
+    return if expired_session session[:movie_params]
+
     session[:movie_params].deep_merge!(params[:movie]) if params[:movie]
     @movie = Movie.new(session[:movie_params])
     @movie.current_step = session[:movie_step]
@@ -56,11 +55,16 @@ class MoviesController < ApplicationController
       if params[:back_button]
         @movie.previous_step
       elsif @movie.last_step?
+        begin_time = Time.now
         if @movie.rotten_tomatoes_url.nil?
           rt_link = Nokogiri::HTML(session[:movie_doc])
         else
           rt_link = Nokogiri::HTML(open(@movie.rotten_tomatoes_url))
         end
+        @total_time = Time.now - begin_time
+
+        return if expired_session rt_link.at_css("h1.movie_title span")
+
         movie_title = rt_link.at_css("h1.movie_title span").text.strip
         @existing_movie = Movie.where(:name => movie_title)
         if @user.movies.select{|s| s.name == movie_title}.empty?
@@ -185,6 +189,15 @@ class MoviesController < ApplicationController
 
   def force_encode text
     text.force_encoding('ISO-8859-1').encode('UTF-8')
+  end
+
+  def expired_session obj
+    if obj.nil?
+      flash[:notice] = "Session has expired"
+      redirect_to root_path 
+      return true
+    end
+    return false
   end
 
   
