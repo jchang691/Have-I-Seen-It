@@ -57,49 +57,47 @@
 
     </div>
     <script type="text/javascript">
-    window.onbeforeunload= function() {i
-        var form = $('.all_movies').html();
-        localStorage.setItem('allLastPage', form)
+        window.onbeforeunload = function () {
+            var form = $('.all_movies').html();
+            localStorage.setItem('allLastPage', form)
 
-        var form2 = $('.user_movies').html();
-        localStorage.setItem('userLastPage', form2)
+            var form2 = $('.user_movies').html();
+            localStorage.setItem('userLastPage', form2)
 
-        localStorage.setItem('prevPerPage', <%= @user.movies_per_page %>)
-    };
+            localStorage.setItem('prevPerPage', <%= @user.movies_per_page %>)
+        };
 
-    $(document).ready(function() {
-       
-        $('#movieTab a[data-toggle="tab"]').on('shown', function (e) {
-            //save the latest tab; use cookies if you like 'em better:
-            localStorage.setItem('lastTab', $(e.target).attr('href'));
+        $(document).ready(function () {
+
+            $('#movieTab a[data-toggle="tab"]').on('shown', function (e) {
+                //save the latest tab; use cookies if you like 'em better:
+                localStorage.setItem('lastTab', $(e.target).attr('href'));
             });
 
-        //go to the latest tab, if it exists:
-        var lastTab = localStorage.getItem('lastTab');
-        if (lastTab != null) {
-          $('ul.nav-tabs').children().removeClass('active');
-          $('a[href='+ lastTab +']').parents('li:first').addClass('active');
-          $('div.tab-content').children().removeClass('active');
-          $(lastTab).addClass('active');
-        }
-        else
-        {
-          $('a[href=#user_library]').parents('li:first').addClass('active');
-          $('div#user_library').addClass('active');
-        }
-
-        if(<%= @user.movies_per_page %> == localStorage.getItem('prevPerPage')){
-            var allLastPage = localStorage.getItem('allLastPage');
-            if(allLastPage){
-                $('.all_movies').html(allLastPage)
+            //go to the latest tab, if it exists:
+            var lastTab = localStorage.getItem('lastTab');
+            if (lastTab != null) {
+                $('ul.nav-tabs').children().removeClass('active');
+                $('a[href=' + lastTab + ']').parents('li:first').addClass('active');
+                $('div.tab-content').children().removeClass('active');
+                $(lastTab).addClass('active');
+            } else {
+                $('a[href=#user_library]').parents('li:first').addClass('active');
+                $('div#user_library').addClass('active');
             }
 
-            var userLastPage = localStorage.getItem('userLastPage');
-            if(userLastPage){
-                $('.user_movies').html(userLastPage)
+            if ( <%= @user.movies_per_page %> == localStorage.getItem('prevPerPage')) {
+                var allLastPage = localStorage.getItem('allLastPage');
+                if (allLastPage) {
+                    $('.all_movies').html(allLastPage)
+                }
+
+                var userLastPage = localStorage.getItem('userLastPage');
+                if (userLastPage) {
+                    $('.user_movies').html(userLastPage)
+                }
             }
-        }
-    });
+        });
   </script>
 <% else %>
     <div class="center hero-unit">

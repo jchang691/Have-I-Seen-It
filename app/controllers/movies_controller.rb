@@ -6,7 +6,7 @@ class MoviesController < ApplicationController
   def index
     session[:movie_step] = session[:movie_params] = session[:movie_doc] = nil
     @user = current_user
-    movies_per_page = @user.nil? ? 10 : @user.movies_per_page
+    movies_per_page = @user.nil? ? 10 : @user.movies_per_page || 10
     @all_movies = Movie.paginate(:order=> "name", page: params[:all_movie_page], :per_page => movies_per_page)
     @movies = @user.movies.paginate(:order=> "name", page: params[:user_page], :per_page => movies_per_page) unless @user.nil?
     @movies = @all_movies if @movies.nil?

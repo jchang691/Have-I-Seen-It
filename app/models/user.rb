@@ -10,7 +10,7 @@
 #
 
 class User < ActiveRecord::Base
-    attr_accessible :name, :email, :password, :password_confirmation, :display_name
+    attr_accessible :name, :email, :password, :password_confirmation, :display_name, :movies_per_page
     has_secure_password
 
     has_and_belongs_to_many :movies
