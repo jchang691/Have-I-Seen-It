@@ -44,7 +44,7 @@ class MoviesController < ApplicationController
   def create
     @movie_has_been_seen = nil
     @user = current_user
-    @total_time = 0
+    begin_time = Time.now
 
     return if expired_session session[:movie_params]
 
@@ -55,18 +55,17 @@ class MoviesController < ApplicationController
       if params[:back_button]
         @movie.previous_step
       elsif @movie.last_step?
-        begin_time = Time.now
         if @movie.rotten_tomatoes_url.nil?
           rt_link = Nokogiri::HTML(session[:movie_doc])
         else
           rt_link = Nokogiri::HTML(open(@movie.rotten_tomatoes_url))
         end
-        @total_time = Time.now - begin_time
 
         return if expired_session rt_link.at_css("h1.movie_title span")
 
         movie_title = rt_link.at_css("h1.movie_title span").text.strip
         @existing_movie = Movie.where(:name => movie_title)
+
         if @user.movies.select{|s| s.name == movie_title}.empty?
           if @existing_movie.empty?
 
@@ -99,6 +98,7 @@ class MoviesController < ApplicationController
       end
       session[:movie_step] = @movie.current_step
     end
+
     if @movie.new_record?
       if @movie_has_been_seen
         flash.now[:notice] = "#{movie_title} has been added"
@@ -107,18 +107,17 @@ class MoviesController < ApplicationController
       else
         if @movie.current_step == "rottentomatoes"
           @rotten_tomatoes_link = @movie.rotten_tomatoes_link
+          @total_time = Time.now - begin_time
         end
         render "new"
         session[:movie_doc] = @movie.rotten_tomatoes_link.to_html
       end
-
     else
       session[:movie_step] = session[:movie_params] = session[:movie_doc] = nil
       flash[:notice] = "#{movie_title} has been saved!"
       redirect_to @movie
     end
-
-
+    
   end
 
   # DELETE /movies/1
