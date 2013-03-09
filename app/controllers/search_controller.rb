@@ -9,5 +9,10 @@ class SearchController < ApplicationController
         @movies = @movies.paginate(:order=> "name", page: params[:movie_page], :per_page => movies_per_page) unless @movies.empty?
         @actors = Actor.find(:all, :conditions => ['lower(name) LIKE ?', "%#{@search_query.downcase}%"])
         @actors = @actors.paginate(:order=> "name", page: params[:actor_page], :per_page => movies_per_page) unless @actors.empty?
+
+        respond_to do |format|
+        	format.html
+        	format.js
+        end
     end
 end
