@@ -7,9 +7,17 @@ class MoviesController < ApplicationController
     session[:movie_step] = session[:movie_params] = session[:movie_doc] = nil
     @user = current_user
     movies_per_page = @user.nil? ? 10 : @user.movies_per_page || 10
-    @all_movies = Movie.paginate(:order=> "name", page: params[:all_movie_page], :per_page => movies_per_page)
-    @movies = @user.movies.paginate(:order=> "name", page: params[:user_page], :per_page => movies_per_page) unless @user.nil?
-    @movies = @all_movies if @movies.nil?
+    alphabet_filter = params[:alpha]
+    if alphabet_filter
+      @all_movies = Movie.where('lower(name) LIKE ?', "#{alphabet_filter}%").paginate(:order=> "name", page: params[:all_movie_page], :per_page => movies_per_page)
+      @movies = @user.movies.where('lower(name) LIKE ?', "#{alphabet_filter}%").paginate(:order=> "name", page: params[:user_page], :per_page => movies_per_page) unless @user.nil?
+      @movies = @all_movies if @movies.nil?
+    else
+      @all_movies = Movie.paginate(:order=> "name", page: params[:all_movie_page], :per_page => movies_per_page)
+      @movies = @user.movies.paginate(:order=> "name", page: params[:user_page], :per_page => movies_per_page) unless @user.nil?
+      @movies = @all_movies if @movies.nil?
+    end
+
 
   end
 
@@ -128,8 +136,7 @@ class MoviesController < ApplicationController
     @user.movies.delete(@movie)
     @vote = Vote.where(:movie_id => params[:id], :user_id => @user.id)[0]
     if !@vote.nil?
-      @vote.delete
-      @vote.save
+      @vote.delete_and_save
     end
 
     respond_to do |format|
@@ -156,9 +163,7 @@ class MoviesController < ApplicationController
   def unseen
     @user = current_user
     @movie = Movie.find(params[:movie_id])
-    @vote = Vote.where(:movie_id => params[:movie_id], :user_id => @user.id)[0]
-    @vote.delete
-    @vote.save
+    @vote = Vote.where(:movie_id => params[:movie_id], :user_id => @user.id)[0].delete_and_save
     respond_to do |format|
       format.html {redirect_to :back}
       format.js
@@ -196,7 +201,7 @@ class MoviesController < ApplicationController
       redirect_to root_path 
       return true
     end
-    return false
+    false
   end
 
   

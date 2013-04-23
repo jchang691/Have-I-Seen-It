@@ -7,6 +7,9 @@
     </ul>
 
     <div class="tab-content">
+        <div id="letter_filter">
+          <%= create_alphabet_filter %>
+        </div>
         <div class="tab-pane" id="user_library">
             <div class="pull-right">
                 Movies Per Page: 
@@ -87,7 +90,8 @@
                 $('div#user_library').addClass('active');
             }
 
-            if ( <%= @user.movies_per_page %> == localStorage.getItem('prevPerPage')) {
+            var mpp = <%= @user.movies_per_page %>;
+            if ( mpp == localStorage.getItem('prevPerPage')) {
                 var allLastPage = localStorage.getItem('allLastPage');
                 if (allLastPage) {
                     $('.all_movies').html(allLastPage)
